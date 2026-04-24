@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My first Webpage: Waffle</title>
+
+<style>
+
+/* BODY */
+body {
+    font-family: 'Times New Roman', sans-serif;
+    margin: 0;
+    background: #ffe6f2;
+}
+
+/* NAVBAR */
+header {
+    background: #ff66a3;
+    color: white;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    text-align: center;
+}
+
+nav a {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 50px;
+    background: #ffcce6;
+}
+
+/* SECTIONS */
+section {
+    display: none;
+    padding: 30px;
+}
+.active {
+    display: block;
+}
+
+/* MENU */
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.card {
+    background: white;
+    width: 220px;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* BUTTON */
+button {
+    background: #ff66a3;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+button:hover {
+    background: #e05590;
+}
+
+/* CART */
+.cart {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #ff66a3;
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>Berry Sweet 🩷✨</h2>
+    <nav>
+        <a onclick="showSection('home')">Home</a>
+        <a onclick="showSection('menu')">Menu</a>
+        <a onclick="showSection('cart')">Cart</a>
+        <a onclick="showSection('about')">About</a>
+    </nav>
+</header>
+
+<!-- HOME -->
+<section id="home" class="active">
+    <div class="hero">
+        <h1>Sweet & Soft Waffles</h1>
+        <p>Freshly made waffles with different delicious toppings!</p>
+        <button onclick="showSection('menu')">Order Now ! </button>
+    </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+    <h2>Our Menu 🧇</h2>
+
+    <div class="menu">
+
+        <div class="card">
+            <img src="https://i.ibb.co/VcwHk3k5/file-00000000135471fab76861545746f75d.png">
+            <h3>Chocolate Waffle 🍫</h3>
+            <p>₱120</p>
+            <button onclick="addToCart('Chocolate Waffle',120)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <img src="https://i.ibb.co/xqDb8sBH/file-00000000d08071fa9fb6cf9b7ee52ec8.png">
+            <h3>Strawberry Waffle 🍓</h3>
+            <p>₱130</p>
+            <button onclick="addToCart('Strawberry Waffle',130)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <img src="https://i.ibb.co/FqBJdLfL/file-00000000d49871fabd354c5d7394c445.png">
+            <h3>Banana Waffle 🍌</h3>
+            <p>₱110</p>
+            <button onclick="addToCart('Banana Waffle',110)">Add to Cart</button>
+        </div>
+
+        <div class="card">
+            <img src="https://i.ibb.co/FbHVGh0g/file-000000000c4471faa8f276de361591c8.png">
+            <h3>Oreo Waffle 🍪</h3>
+            <p>₱125</p>
+            <button onclick="addToCart('Oreo Waffle',125)">Add to Cart</button>
+        </div>
+
+    </div>
+</section>
+
+<!-- CART -->
+<section id="cart">
+    <h2>Your Cart 🛒</h2>
+
+    <div class="cart">
+        <ul id="cartList"></ul>
+        <h3>Total: ₱<span id="total">0</span></h3>
+        <button onclick="checkout()">Checkout</button>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <h2>About Us ✍🏻</h2>
+    <p>We serve fresh, soft and delicious waffles made with love. Every bite is happiness!</p>
+
+    <h2>Contact Us 📞</h2>
+    <p> 📍 Candon City, Ilocos Sur</p>
+    <p>📞 0948-791-0854</p>
+    <p> 📩 berrysweet.waffle@gmail.com</p>
+</section>
+
+<footer>
+    <p> Made with Love and Care.</p>
+    <p>&copy; 2026 Berry Sweet Waffle. All right reserved.</p>
+</footer>
+
+<script>
+
+let cart = [];
+let total = 0;
+
+function showSection(id) {
+    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function addToCart(name, price) {
+    cart.push({name, price});
+    total += price;
+    updateCart();
+    alert(name + " added to cart!");
+}
+
+function updateCart() {
+    let list = document.getElementById("cartList");
+    list.innerHTML = "";
+
+    cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item.name + " - ₱" + item.price;
+        list.appendChild(li);
+    });
+
+    document.getElementById("total").textContent = total;
+}
+
+function checkout() {
+    if(cart.length === 0){
+        alert("Your cart is empty!");
+    } else {
+        alert("Thank you for your order! 🩷");
+        cart = [];
+        total = 0;
+        updateCart();
+    }
+}
+
+</script>
+
+</body>
+</html>
+
